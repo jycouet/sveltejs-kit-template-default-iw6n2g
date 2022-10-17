@@ -1,0 +1,11 @@
+query ProjectsList($limit: Int, $offset: Int) {
+    project(limit: $limit, offset: $offset) {
+        username
+        name
+        description
+        updates(limit: 7, order_by: {updated_at: desc}) {
+            followers
+            updated_at
+        }
+    }
+}

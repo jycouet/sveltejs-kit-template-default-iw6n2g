@@ -1,0 +1,579 @@
+schema {
+  query: query_root
+  subscription: subscription_root
+}
+
+"""whether this query should be cached (Hasura Cloud only)"""
+directive @cached(
+  """refresh the cache entry"""
+  refresh: Boolean! = false
+
+  """measured in seconds"""
+  ttl: Int! = 60
+) on QUERY
+
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+
+  """does the column match the given case-insensitive pattern"""
+  _ilike: String
+  _in: [String!]
+
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: String
+  _is_null: Boolean
+
+  """does the column match the given pattern"""
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+
+  """does the column NOT match the given case-insensitive pattern"""
+  _nilike: String
+  _nin: [String!]
+
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: String
+
+  """does the column NOT match the given pattern"""
+  _nlike: String
+
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: String
+
+  """does the column NOT match the given SQL regular expression"""
+  _nsimilar: String
+
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: String
+
+  """does the column match the given SQL regular expression"""
+  _similar: String
+}
+
+scalar _text
+
+"""
+Boolean expression to compare columns of type "_text". All fields are combined with logical 'AND'.
+"""
+input _text_comparison_exp {
+  _eq: _text
+  _gt: _text
+  _gte: _text
+  _in: [_text!]
+  _is_null: Boolean
+  _lt: _text
+  _lte: _text
+  _neq: _text
+  _nin: [_text!]
+}
+
+scalar bigint
+
+"""
+Boolean expression to compare columns of type "bigint". All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in ascending order, nulls last"""
+  asc
+
+  """in ascending order, nulls first"""
+  asc_nulls_first
+
+  """in ascending order, nulls last"""
+  asc_nulls_last
+
+  """in descending order, nulls first"""
+  desc
+
+  """in descending order, nulls first"""
+  desc_nulls_first
+
+  """in descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "project"
+"""
+type project {
+  added_at: timestamptz!
+  blockchains: _text!
+  categories: _text!
+  created_at: timestamptz!
+  description: String
+  discord: String
+  id: bigint!
+  medium: String
+  name: String!
+  opensea: String
+  telegram: String
+
+  """An array relationship"""
+  updates(
+    """distinct select on columns"""
+    distinct_on: [update_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [update_order_by!]
+
+    """filter the rows returned"""
+    where: update_bool_exp
+  ): [update!]!
+  username: String!
+}
+
+"""
+Boolean expression to filter rows from the table "project". All fields are combined with a logical 'AND'.
+"""
+input project_bool_exp {
+  _and: [project_bool_exp!]
+  _not: project_bool_exp
+  _or: [project_bool_exp!]
+  added_at: timestamptz_comparison_exp
+  blockchains: _text_comparison_exp
+  categories: _text_comparison_exp
+  created_at: timestamptz_comparison_exp
+  description: String_comparison_exp
+  discord: String_comparison_exp
+  id: bigint_comparison_exp
+  medium: String_comparison_exp
+  name: String_comparison_exp
+  opensea: String_comparison_exp
+  telegram: String_comparison_exp
+  updates: update_bool_exp
+  username: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "project"."""
+input project_order_by {
+  added_at: order_by
+  blockchains: order_by
+  categories: order_by
+  created_at: order_by
+  description: order_by
+  discord: order_by
+  id: order_by
+  medium: order_by
+  name: order_by
+  opensea: order_by
+  telegram: order_by
+  updates_aggregate: update_aggregate_order_by
+  username: order_by
+}
+
+"""
+select columns of table "project"
+"""
+enum project_select_column {
+  """column name"""
+  added_at
+
+  """column name"""
+  blockchains
+
+  """column name"""
+  categories
+
+  """column name"""
+  created_at
+
+  """column name"""
+  description
+
+  """column name"""
+  discord
+
+  """column name"""
+  id
+
+  """column name"""
+  medium
+
+  """column name"""
+  name
+
+  """column name"""
+  opensea
+
+  """column name"""
+  telegram
+
+  """column name"""
+  username
+}
+
+type query_root {
+  """
+  fetch data from the table: "project"
+  """
+  project(
+    """distinct select on columns"""
+    distinct_on: [project_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [project_order_by!]
+
+    """filter the rows returned"""
+    where: project_bool_exp
+  ): [project!]!
+
+  """fetch data from the table: "project" using primary key columns"""
+  project_by_pk(id: bigint!): project
+
+  """
+  fetch data from the table: "update"
+  """
+  update(
+    """distinct select on columns"""
+    distinct_on: [update_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [update_order_by!]
+
+    """filter the rows returned"""
+    where: update_bool_exp
+  ): [update!]!
+
+  """fetch data from the table: "update" using primary key columns"""
+  update_by_pk(id: uuid!): update
+}
+
+type subscription_root {
+  """
+  fetch data from the table: "project"
+  """
+  project(
+    """distinct select on columns"""
+    distinct_on: [project_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [project_order_by!]
+
+    """filter the rows returned"""
+    where: project_bool_exp
+  ): [project!]!
+
+  """fetch data from the table: "project" using primary key columns"""
+  project_by_pk(id: bigint!): project
+
+  """
+  fetch data from the table: "update"
+  """
+  update(
+    """distinct select on columns"""
+    distinct_on: [update_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [update_order_by!]
+
+    """filter the rows returned"""
+    where: update_bool_exp
+  ): [update!]!
+
+  """fetch data from the table: "update" using primary key columns"""
+  update_by_pk(id: uuid!): update
+}
+
+scalar timestamptz
+
+"""
+Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+"""
+columns and relationships of "update"
+"""
+type update {
+  followers: Int!
+  following: Int!
+  id: uuid!
+  listed: Int!
+  project_id: bigint!
+  tweets: Int!
+  updated_at: timestamptz!
+}
+
+"""
+order by aggregate values of table "update"
+"""
+input update_aggregate_order_by {
+  avg: update_avg_order_by
+  count: order_by
+  max: update_max_order_by
+  min: update_min_order_by
+  stddev: update_stddev_order_by
+  stddev_pop: update_stddev_pop_order_by
+  stddev_samp: update_stddev_samp_order_by
+  sum: update_sum_order_by
+  var_pop: update_var_pop_order_by
+  var_samp: update_var_samp_order_by
+  variance: update_variance_order_by
+}
+
+"""
+order by avg() on columns of table "update"
+"""
+input update_avg_order_by {
+  followers: order_by
+  following: order_by
+  listed: order_by
+  project_id: order_by
+  tweets: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "update". All fields are combined with a logical 'AND'.
+"""
+input update_bool_exp {
+  _and: [update_bool_exp!]
+  _not: update_bool_exp
+  _or: [update_bool_exp!]
+  followers: Int_comparison_exp
+  following: Int_comparison_exp
+  id: uuid_comparison_exp
+  listed: Int_comparison_exp
+  project_id: bigint_comparison_exp
+  tweets: Int_comparison_exp
+  updated_at: timestamptz_comparison_exp
+}
+
+"""
+order by max() on columns of table "update"
+"""
+input update_max_order_by {
+  followers: order_by
+  following: order_by
+  id: order_by
+  listed: order_by
+  project_id: order_by
+  tweets: order_by
+  updated_at: order_by
+}
+
+"""
+order by min() on columns of table "update"
+"""
+input update_min_order_by {
+  followers: order_by
+  following: order_by
+  id: order_by
+  listed: order_by
+  project_id: order_by
+  tweets: order_by
+  updated_at: order_by
+}
+
+"""Ordering options when selecting data from "update"."""
+input update_order_by {
+  followers: order_by
+  following: order_by
+  id: order_by
+  listed: order_by
+  project_id: order_by
+  tweets: order_by
+  updated_at: order_by
+}
+
+"""
+select columns of table "update"
+"""
+enum update_select_column {
+  """column name"""
+  followers
+
+  """column name"""
+  following
+
+  """column name"""
+  id
+
+  """column name"""
+  listed
+
+  """column name"""
+  project_id
+
+  """column name"""
+  tweets
+
+  """column name"""
+  updated_at
+}
+
+"""
+order by stddev() on columns of table "update"
+"""
+input update_stddev_order_by {
+  followers: order_by
+  following: order_by
+  listed: order_by
+  project_id: order_by
+  tweets: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "update"
+"""
+input update_stddev_pop_order_by {
+  followers: order_by
+  following: order_by
+  listed: order_by
+  project_id: order_by
+  tweets: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "update"
+"""
+input update_stddev_samp_order_by {
+  followers: order_by
+  following: order_by
+  listed: order_by
+  project_id: order_by
+  tweets: order_by
+}
+
+"""
+order by sum() on columns of table "update"
+"""
+input update_sum_order_by {
+  followers: order_by
+  following: order_by
+  listed: order_by
+  project_id: order_by
+  tweets: order_by
+}
+
+"""
+order by var_pop() on columns of table "update"
+"""
+input update_var_pop_order_by {
+  followers: order_by
+  following: order_by
+  listed: order_by
+  project_id: order_by
+  tweets: order_by
+}
+
+"""
+order by var_samp() on columns of table "update"
+"""
+input update_var_samp_order_by {
+  followers: order_by
+  following: order_by
+  listed: order_by
+  project_id: order_by
+  tweets: order_by
+}
+
+"""
+order by variance() on columns of table "update"
+"""
+input update_variance_order_by {
+  followers: order_by
+  following: order_by
+  listed: order_by
+  project_id: order_by
+  tweets: order_by
+}
+
+scalar uuid
+
+"""
+Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'.
+"""
+input uuid_comparison_exp {
+  _eq: uuid
+  _gt: uuid
+  _gte: uuid
+  _in: [uuid!]
+  _is_null: Boolean
+  _lt: uuid
+  _lte: uuid
+  _neq: uuid
+  _nin: [uuid!]
+}
