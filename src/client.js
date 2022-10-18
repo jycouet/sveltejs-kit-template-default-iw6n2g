@@ -1,7 +1,9 @@
 import { HoudiniClient } from '$houdini';
 
 async function fetchQuery({ fetch, text = '', variables = {}, metadata }) {
-	const url = import.meta.env.VITE_GRAPHQL_ENDPOINT || 'https://api.emergingweb3.com/v1/graphql';
+	const url = 'https://api.emergingweb3.com/v1/graphql';
+	console.log(`variables`, variables);
+
 	const result = await fetch(url, {
 		method: 'POST',
 		headers: {
